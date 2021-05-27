@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "6_axis_I2S_v1p8")(type "KiCad")(uri "${KIPRJMOD}/6_axis_I2S_v1p8.kicad_sym")(options "")(descr ""))
+)
