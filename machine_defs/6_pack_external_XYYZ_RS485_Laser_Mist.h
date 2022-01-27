@@ -2,14 +2,15 @@
 // clang-format off
 
 /*
-   6_pack_external_XYYZ_RS485_Laser_Mist.h
+    6_pack_external_XYYZ_RS485_Laser_Mist.h
 
+    Covers all V1 versions V1p0, V1p1, etc
 
     Part of Grbl_ESP32
     Pin assignments for the ESP32 I2S 6-axis board
-
-    2021-03-07  Bart Dring for Grant O.
     
+    2021-08-02 B. Dring for Jim Mires
+
     Grbl_ESP32 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -20,17 +21,8 @@
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with Grbl_ESP32.  If not, see <http://www.gnu.org/licenses/>.
-
-
-    6 Pack Jumpers for External Drivers
-    The only jumper you set is the Vcc on 5V
-    Stallguard jumpers must not be connected
-    MS/SPI Do not need to be installed. It is OK to put them oonm the MS side
-    TMC5160 Is does not matter if this is installed or not on any side.
-
-
 */
-#define MACHINE_NAME            "6 Pack External XYYZ RS485 Laser"
+#define MACHINE_NAME            "6 Pack External XYYZ RS485 Mist"
 
 #define N_AXIS 3
 
@@ -50,36 +42,27 @@
 #define X_DISABLE_PIN           I2SO(0)
 #define X_DIRECTION_PIN         I2SO(1)
 #define X_STEP_PIN              I2SO(2)
+#define X_STEPPER_MS3           I2SO(3)
 
 // Motor Socket #2
 #define Y_DIRECTION_PIN         I2SO(4)
 #define Y_STEP_PIN              I2SO(5)
+#define Y_STEPPER_MS3           I2SO(6)
 #define Y_DISABLE_PIN           I2SO(7)
 
 // Motor Socket #3
-#define Y2_DISABLE_PIN          I2SO(8)
-#define Y2_DIRECTION_PIN        I2SO(9)
-#define Y2_STEP_PIN             I2SO(10)
-
+#define Y2_DISABLE_PIN           I2SO(8)
+#define Y2_DIRECTION_PIN         I2SO(9)
+#define Y2_STEP_PIN              I2SO(10)
+#define Y2_STEPPER_MS3           I2SO(11)
 
 // Motor Socket #4
 #define Z_DIRECTION_PIN         I2SO(12)
 #define Z_STEP_PIN              I2SO(13)
+#define Z_STEPPER_MS3           I2SO(14) 
 #define Z_DISABLE_PIN           I2SO(15)
 
-/*
-// Motor Socket #5
-#define B_DISABLE_PIN           I2SO(16)
-#define B_DIRECTION_PIN         I2SO(17)
-#define B_STEP_PIN              I2SO(18)
-#define B_STEPPER_MS3           I2SO(19) 
 
-// Motor Socket #5
-#define C_DIRECTION_PIN         I2SO(20)
-#define C_STEP_PIN              I2SO(21)
-#define C_STEPPER_MS3           I2SO(22)
-#define C_DISABLE_PIN           I2SO(23)
-*/
 
 /*
     Socket I/O reference
@@ -119,20 +102,23 @@ Socket #5
 
 */
 
-
 // 4x Input Module in Socket #1
 // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-Switch-Input-module
-#define X_LIMIT_PIN             GPIO_NUM_33  
-#define Y_LIMIT_PIN             GPIO_NUM_32
-#define Z_LIMIT_PIN             GPIO_NUM_35 
+#define X_LIMIT_PIN            GPIO_NUM_33
+#define Y_LIMIT_PIN            GPIO_NUM_32
+#define Y2_LIMIT_PIN           GPIO_NUM_35
+#define Z_LIMIT_PIN            GPIO_NUM_34
 
-// // 4x Switch Input module  in socket #2
-// // // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-Switch-Input-module
-#define PROBE_PIN               GPIO_NUM_2
+// 4x Switch Input module  in socket #2
+// // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-Switch-Input-module
+#define PROBE_PIN                     GPIO_NUM_2
+#define CONTROL_FEED_HOLD_PIN         GPIO_NUM_25
+#define CONTROL_CYCLE_START_PIN       GPIO_NUM_39
+///#define    TBD  GPIO_NUM_36
 
 // RS485 Modbus In socket #3
 // https://github.com/bdring/6-Pack_CNC_Controller/wiki/RS485-Modbus-Module
-#define SPINDLE_TYPE             SpindleType::HUANYANG // default, check actual $Spindle/Type Setting
+#define SPINDLE_TYPE            SpindleType::HUANYANG // default, check actual $Spindle/Type Setting
 #define VFD_RS485_TXD_PIN        GPIO_NUM_26
 #define VFD_RS485_RTS_PIN        GPIO_NUM_4
 #define VFD_RS485_RXD_PIN        GPIO_NUM_16
@@ -140,23 +126,20 @@ Socket #5
 // 5V output CNC module in socket #4
 // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-5V-Buffered-Output-Module
 #define LASER_OUTPUT_PIN          GPIO_NUM_14
-#define LASER_ENABLE_PIN          GPIO_NUM_13 
+#define LASER_ENABLE_PIN          GPIO_NUM_13 // optional 
+#define COOLANT_MIST_PIN          GPIO_NUM_15
+#define COOLANT_FLOOD_PIN         GPIO_NUM_12
 
 
-// https://github.com/bdring/6-Pack_CNC_Controller/wiki/Relay-Module
-// Relay module as Mist on CNC I/O Module socket #5
-#define COOLANT_MIST_PIN            I2SO(24) // Relay for Mist on module socket #5
+// === Default settings
+#define DEFAULT_STEP_PULSE_MICROSECONDS I2S_OUT_USEC_PER_PULSE
 
+#define DEFAULT_INVERT_LIMIT_PINS       0
+#define DEFAULT_INVERT_PROBE_PIN        0
 
-// ================= Setting Defaults ==========================
-// see wiki https://github.com/bdring/Grbl_Esp32/wiki/External-Stepper-Drivers
-#define DEFAULT_STEP_ENABLE_DELAY        5 // how long after enable do we wait for 
-#define DEFAULT_STEP_PULSE_MICROSECONDS  4 // length of step pulse. Must be greater than I2S_OUT_USEC_PER_PULSE (4) with I2S
-#define STEP_PULSE_DELAY                 6 // gap between enable and dir changes before step
+#ifdef INVERT_CONTROL_PIN_MASK
+#    undef INVERT_CONTROL_PIN_MASK
+#endif
+#define INVERT_CONTROL_PIN_MASK B0001
 
-#define DEFAULT_STEPPING_INVERT_MASK     (bit(X_AXIS) | bit(Y_AXIS) | bit(Z_AXIS))
-#define DEFAULT_DIRECTION_INVERT_MASK    (bit(X_AXIS) | bit(Y_AXIS) | bit(Z_AXIS))
-#define DEFAULT_INVERT_ST_ENABLE         false
-
-
-
+#define DEFAULT_INVERT_LIMIT_PINS       0

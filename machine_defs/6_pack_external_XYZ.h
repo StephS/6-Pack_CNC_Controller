@@ -9,7 +9,7 @@
     Part of Grbl_ESP32
     Pin assignments for the ESP32 I2S 6-axis board
 
-    2021    - Bart Dring
+    2021-09-17    - Bart Dring for Mark Chambers
     
     Grbl_ESP32 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -123,10 +123,28 @@ Socket #5
 // 4x Input Module in Socket #1
 // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-Switch-Input-module
 #define X_LIMIT_PIN                 GPIO_NUM_33
-#define Y_LIMIT_PIN                 GPIO_NUM_32
-#define Z_LIMIT_PIN                 GPIO_NUM_35
+#define X2_LIMIT_PIN                GPIO_NUM_32
+#define Y_LIMIT_PIN                 GPIO_NUM_35
+#define Y2_LIMIT_PIN                GPIO_NUM_34
+
+// 4x Switch Input module  in socket #2
+// // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-Switch-Input-module
+#define PROBE_PIN           GPIO_NUM_2
+//#define CONTROL_FEED_HOLD_PIN       GPIO_NUM_25
+//#define CONTROL_CYCLE_START_PIN     GPIO_NUM_39
+//#define CONTROL_SAFETY_DOOR_PIN     GPIO_NUM_36
+
+// Example 5V output CNC module in socket #3
+// https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-5V-Buffered-Output-Module
+#define SPINDLE_TYPE            SpindleType::PWM
+#define SPINDLE_OUTPUT_PIN      GPIO_NUM_26  // 1st channel
+#define SPINDLE_ENABLE_PIN      GPIO_NUM_4   // 2nd channel
+#define COOLANT_MIST_PIN         GPIO_NUM_16  // 3rd channel
+#define COOLANT_FLOOD_PIN        GPIO_NUM_27  // M7 on M9 Off
+
 
 // ================= Setting Defaults ==========================
+
 // see wiki https://github.com/bdring/Grbl_Esp32/wiki/External-Stepper-Drivers
 #define DEFAULT_STEP_ENABLE_DELAY        5 // how long after enable do we wait for 
 #define DEFAULT_STEP_PULSE_MICROSECONDS  4 // length of step pulse. Must be greater than I2S_OUT_USEC_PER_PULSE (4) with I2S
@@ -135,6 +153,9 @@ Socket #5
 #define DEFAULT_STEPPING_INVERT_MASK     (bit(X_AXIS) | bit(Y_AXIS) | bit(Z_AXIS))
 #define DEFAULT_DIRECTION_INVERT_MASK    (bit(X_AXIS) | bit(Y_AXIS) | bit(Z_AXIS))
 #define DEFAULT_INVERT_ST_ENABLE         false
+
+#define DEFAULT_INVERT_LIMIT_PINS       0
+#define DEFAULT_INVERT_PROBE_PIN        0
 
 
 

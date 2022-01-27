@@ -9,7 +9,7 @@
     Part of Grbl_ESP32
     Pin assignments for the ESP32 I2S 6-axis board
     
-    
+    2021-07-31 For Matthew Winchell
 
     Grbl_ESP32 is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
     You should have received a copy of the GNU General Public License
     along with Grbl_ESP32.  If not, see <http://www.gnu.org/licenses/>.
 */
-#define MACHINE_NAME            "6 Pack Controller V1 (StepStick)"
+#define MACHINE_NAME            "6 Pack Stepstick XYZABC"
 
 #define N_AXIS 6
 
@@ -84,6 +84,35 @@
     Click on each module to get example for using the modules in the sockets
 
 
+Socket #1
+#1 GPIO_NUM_33 
+#2 GPIO_NUM_32
+#3 GPIO_NUM_35 (input only)
+#4 GPIO_NUM_34 (input only)
+
+Socket #2
+#1 GPIO_NUM_2
+#2 GPIO_NUM_25
+#3 GPIO_NUM_39 (input only)
+#4 GPIO_NUM_36 (input only)
+
+Socket #3
+#1 GPIO_NUM_26
+#2 GPIO_NUM_4
+#3 GPIO_NUM_16
+#4 GPIO_NUM_27
+
+Socket #4
+#1 GPIO_NUM_14
+#2 GPIO_NUM_13
+#3 GPIO_NUM_15
+#4 GPIO_NUM_12
+
+Socket #5
+#1 I2SO(24)  (output only)
+#2 I2SO(25)  (output only)
+#3 I2SO26)  (output only)
+
 */
 
 // 4x Input Module in Socket #1
@@ -93,8 +122,16 @@
 #define Z_LIMIT_PIN             GPIO_NUM_35
 #define A_LIMIT_PIN             GPIO_NUM_34
 
-#define DEFAULT_INVERT_LIMIT_PINS       0
+// 4x Switch Input module  in socket #2
+// // https://github.com/bdring/6-Pack_CNC_Controller/wiki/4x-Switch-Input-module
+#define B_LIMIT_PIN           GPIO_NUM_2
+#define C_LIMIT_PIN           GPIO_NUM_25
+//#define MACRO_BUTTON_1_PIN    GPIO_NUM_39
+//#define MACRO_BUTTON_2_PIN    GPIO_NUM_36
 
 
 // === Default settings
 #define DEFAULT_STEP_PULSE_MICROSECONDS I2S_OUT_USEC_PER_PULSE
+
+#define DEFAULT_INVERT_LIMIT_PINS       0
+#define DEFAULT_INVERT_PROBE_PIN        0
